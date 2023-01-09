@@ -1,38 +1,12 @@
 @use '../util' as u;
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
 
 html {
   box-sizing: border-box;
-  // font-size: 62.5%;
 }
 
-h1,
-h2,
-h3 {
-  // font-weight: 700;
-  // line-height: 1.1;
-  // margin-top: 0;
-}
-
-h1 {
-  // font-size: clamp(28px, 1rem + 2vw, 40px);
-  // font-size: clamp(u.rem(28), u.rem(16) + 2vw, u.rem(40));
-
-  // @include u.breakpoint(medium) {
-  //   font-size: 36px;
-  // }
-
-  // @include u.breakpoint(large) {
-  //   font-size: 42px;
-  // }
-}
-
-h2 {
-  // font-size: clamp(u.rem(22), u.rem(14) + 1.5vw, u.rem(36));
-}
-
-p {
-  // margin-top: 0;
-  // font-size: u.rem(16);
+body {
+  font-family: 'Do Hyeon', sans-serif;
 }
 
 a,

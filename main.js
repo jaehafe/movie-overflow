@@ -68,24 +68,8 @@ const errorHandle = {
 
 //
 
-const fetchQuestions = async () => {
-  $('.questionsDOM').innerHTML = `<div class='loading'></div>`;
-  try {
-    const res = await getMovies();
-    const { items } = await res.json();
-    console.log(items);
-    return items;
-  } catch (err) {
-    console.log(err);
-    $('.questionsDOM').innerHTML = '<p class="error">there was an error</p>';
-  }
-};
-
-// api
-const getMovies = async (title = '', year = '', page = 2) => {
-  $(
-    '.section__container-movie-card-container'
-  ).innerHTML = `<div class='loading'></div>`;
+const fetchMovies = async (title = '', year = '', page = 1) => {
+  errorHandle.loadingDOM();
   try {
     const s = `&s=${title}`;
     const y = `&y=${year}`;
@@ -94,15 +78,22 @@ const getMovies = async (title = '', year = '', page = 2) => {
       `https://omdbapi.com/?apikey=${import.meta.env.VITE_API_KEY}${s}${y}${p}`
     );
     const data = await res.json();
+    const { Search: movies, totalResults } = data;
+    console.log(movies);
+    return { movies, totalResults };
+  } catch (err) {
+    console.log(err);
+    errorHandle.errorDOM();
+    throw err;
+  }
+};
 
-    if (data.Response === 'True') {
-      const { Search: movies, totalResults } = data;
-      console.log(movies);
-
-      const movieTemplate = movies
-        .map((movie) => {
-          const { Poster, Title, Year, imdbID } = movie;
-          return `
+// api
+const displayMovies = (movieData, results) => {
+  const movieList = movieData
+    .map((movie) => {
+      const { Poster, Title, Year, imdbID } = movie;
+      return `
                 <div class="section__container-movie-card" data-movie-id="${imdbID}">
                   <button>
                     <img
@@ -132,31 +123,103 @@ const getMovies = async (title = '', year = '', page = 2) => {
                   </div>
                 </div>
                 `;
-        })
-        .join('');
-      cardContainer.innerHTML = movieTemplate;
-
-      let search = $('#searchInput').value;
-      $(
-        '.main__search--result'
-      ).innerHTML = `${search}이(가) 총 ${totalResults} 개 검색되었습니다.`;
-    }
-  } catch (err) {
-    console.log(err);
-    $('.section__container-movie-card-container').innerHTML =
-      '<p class="error">there was an error</p>';
-    throw err;
-  }
+    })
+    .join('');
+  cardContainer.innerHTML = movieList;
+  let search = $('#searchInput').value;
+  $(
+    '.main__search--result'
+  ).innerHTML = `${search}이(가) 총 ${results} 개 검색되었습니다.`;
 };
 
 $('.main__search-container').addEventListener('submit', (e) => {
   e.preventDefault();
   let search = $('#searchInput').value;
   if (search) {
-    getMovies(search);
-    search = '';
+    display(search);
+    e.target.value = '';
   }
 });
+
+const display = async (title) => {
+  const { movies, totalResults } = await fetchMovies(title);
+  displayMovies(movies, totalResults);
+};
+
+// const getMovies = async (title = '', year = '', page = 1) => {
+//   $(
+//     '.section__container-movie-card-container'
+//   ).innerHTML = `<div class='loading'></div>`;
+//   try {
+//     const s = `&s=${title}`;
+//     const y = `&y=${year}`;
+//     const p = `&page=${page}`;
+//     const res = await fetch(
+//       `https://omdbapi.com/?apikey=${import.meta.env.VITE_API_KEY}${s}${y}${p}`
+//     );
+//     const data = await res.json();
+
+//     if (data.Response === 'True') {
+//       const { Search: movies, totalResults } = data;
+
+//       const movieTemplate = movies
+//         .map((movie) => {
+//           const { Poster, Title, Year, imdbID } = movie;
+//           return `
+//                 <div class="section__container-movie-card" data-movie-id="${imdbID}">
+//                   <button>
+//                     <img
+//                       data-modal-target="#modal"
+//                       src="${Poster}"
+//                       alt=""
+//                       class="section__container-movie-card--img"
+//                     />
+//                   </button>
+//                   <div class="flex">
+//                     <div class="section__container-movie-card--thumb">
+//                       <p class="section__container-movie-card--year">${Year}</p>
+//                       <h2 class="section__container-movie-card--title">${Title}</h2>
+//                     </div>
+//                     <div class="section__container-movie-card--btn">
+//                       <button
+//                         class="section__container-movie-card--btn-add movie-add-button"
+//                       >
+//                         추가
+//                       </button>
+//                       <button
+//                         class="section__container-movie-card--btn-remove movie-remove-button"
+//                       >
+//                         삭제
+//                       </button>
+//                     </div>
+//                   </div>
+//                 </div>
+//                 `;
+//         })
+//         .join('');
+//       cardContainer.innerHTML = movieTemplate;
+
+//       let search = $('#searchInput').value;
+//       $(
+//         '.main__search--result'
+//       ).innerHTML = `${search}이(가) 총 ${totalResults} 개 검색되었습니다.`;
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     $('.section__container-movie-card-container').innerHTML =
+//       '<p class="error">there was an error</p>';
+//     throw err;
+//   }
+// };
+
+// $('.main__search-container').addEventListener('submit', (e) => {
+//   e.preventDefault();
+//   let search = $('#searchInput').value;
+//   if (search) {
+//     getMovies(search);
+//     search = '';
+//   }
+// });
 
 // const displayMovies = async (title) => {
 //   const movieList = await getMovies(title);

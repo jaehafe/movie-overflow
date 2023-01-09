@@ -72,8 +72,18 @@
                 <input
                   class="main__search--input"
                   id="searchInput"
-                  placeholder="what movie are you looking for?..."
+                  placeholder="영화 제목을 입력하세요"
                 />
+                <div class="main__search--options">
+                  <select class="main__search--options-page">
+                    <option value="1" selected="selected">10</option>
+                    <option value="2">20</option>
+                    <option value="3">30</option>
+                  </select>
+                  <select class="main__search--options-select-year">
+                    <option value="" selected="selected">All Years</option>
+                  </select>
+                </div>
                 <button
                   type="submit"
                   id="searchBtn"
@@ -107,14 +117,14 @@
           />
           <!-- Card -->
           <!-- <div class="section__container-movie-card" data-movie-id="movie-id">
-            <button href="#">
+            <a href="#">
               <img
                 data-modal-target="#modal"
                 src="/thum.jpeg"
                 alt=""
                 class="section__container-movie-card--img"
               />
-            </button>
+            </a>
             <div class="flex">
               <div class="section__container-movie-card--thumb">
                 <p class="section__container-movie-card--year">2015</p>
@@ -137,6 +147,7 @@
         </div>
       </div>
     </section>
+    <div id="target"></div>
 
     <!-- modal overlay -->
     <div class="modal" id="modal">
@@ -205,7 +216,7 @@
               officiis distinctio ipsa.
             </div>
           </div>
-          <!--  -->
+          <!-- modal body end -->
         </div>
       </div>
     </div>

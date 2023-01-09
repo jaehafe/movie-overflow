@@ -168,6 +168,33 @@ header {
       max-width: 300px;
     }
 
+    &--options {
+      display: flex;
+      align-items: center;
+
+      & > select {
+        height: 100%;
+        border: var(--main-color);
+        background-color: var(--main-color);
+        color: #fff;
+        border-radius: 7px;
+
+        &:hover,
+        &:active {
+          background-color: #fff;
+          color: var(--main-color);
+          transition: background-color 0.5s ease;
+        }
+      }
+      &-page {
+        // height: 100%;
+      }
+
+      &-select-year {
+        // height: 100%;
+      }
+    }
+
     &--button {
       margin: 0;
       padding: 0.5rem 1rem;
@@ -225,6 +252,9 @@ header {
   border-radius: 7px;
 
   &__container {
+    min-width: 100%;
+    min-height: 300px;
+    max-width: auto;
     margin: 0 auto;
     padding: 10px;
     display: flex;
@@ -239,7 +269,6 @@ header {
       grid-template-columns: repeat(4, 1fr);
       row-gap: 20px;
       place-items: center;
-
       width: 100%;
       padding: 10px;
     }
@@ -252,11 +281,21 @@ header {
       border-radius: 7px;
       overflow: hidden;
 
+      &:hover {
+        transform: scale(1.2);
+      }
+
       &--img {
+        width: 210px;
+        height: 320px;
         object-fit: contain;
+        overflow: hidden;
+        margin: 0 auto;
+        object-fit: cover;
 
         &:hover {
-          background: rgba(0, 0, 0, 0.7);
+          cursor: pointer;
+          // background: rgba(0, 0, 0, 0.7);
         }
       }
 

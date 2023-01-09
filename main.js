@@ -142,6 +142,11 @@ $('.main__search-container').addEventListener('submit', (e) => {
 });
 
 const display = async (title) => {
-  const { movies, totalResults } = await fetchMovies(title);
+  const { movies, totalResults } = await fetchMovies(title, '', 3);
   displayMovies(movies, totalResults);
 };
+
+// const fetch20Movies = () => {
+//   const { movies, totalResults } = await fetchMovies(title, );
+//   const { movies, totalResults } = await fetchMovies(title);
+// }

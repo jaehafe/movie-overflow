@@ -102,7 +102,8 @@ const updateTotalResults = async () => {
   const { totalResults } = await getMovies(title, year);
   // const { totalResults } = await getMovies();
   let val = $searchInput.value;
-  return ($searchTotalResult.innerHTML = `${val}이(가) 총 ${totalResults} 개 검색되었습니다.`);
+  // console.log($movies.children.length);
+  return ($searchTotalResult.innerHTML = `${val}이(가) ${totalResults} 개 중 ${$movies.children.length} 검색되었습니다.`);
 };
 
 const displayedMovies = async () => {};

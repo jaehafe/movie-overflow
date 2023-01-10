@@ -61,7 +61,9 @@ async function getMovies(title, year, page) {
   const s = `&s=${title}`;
   const y = `&y=${year}`;
   const p = `&page=${page}`;
-  const res = await fetch(`https://omdbapi.com/?apikey=7035c60c${s}${y}${p}`);
+  const res = await fetch(
+    `https://omdbapi.com/?apikey=${import.meta.env.VITE_API_KEY}${s}${y}${p}`
+  );
   const { Search: movies, totalResults } = await res.json();
   return { movies, totalResults };
 }
@@ -69,7 +71,9 @@ async function getMovies(title, year, page) {
 // 영화 상세페이지 가져오기
 const getMovieDetail = async (movieId) => {
   const res = await fetch(
-    `https://omdbapi.com/?apikey=7035c60c&i=${movieId}&plot=full`
+    `https://omdbapi.com/?apikey=${
+      import.meta.env.VITE_API_KEY
+    }&i=${movieId}&plot=full`
   );
   const movieDetailData = await res.json();
   return movieDetailData;

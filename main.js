@@ -307,41 +307,14 @@ const getMoreMovies = async () => {
 
 const handleErrNLoading = {
   loadingDOM: (selector) => {
-    return (selector.innerHTML = ` <svg
-    class="spinner active"
-    width="30px"
-    height="30px"
-    viewBox="0 0 66 66"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <circle
-      class="path"
-      fill="none"
-      stroke-width="6"
-      stroke-linecap="round"
-      cx="33"
-      cy="33"
-      r="30"
-    ></circle>
-  </svg>`);
-    // $('.main__search--result')
+    return (selector.innerHTML = `<svg class="spinner active" width="30px" height="30px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg>`);
   },
 
   errorDOM: (selector) => {
-    // return ($(
-    //   '.main__search--result'
-    // ).innerHTML = `<p class="error">에러가 발생했습니다.</p>`);
     return (selector.innerHTML = `<p class="error">에러가 발생했습니다.</p>`);
   },
 
   undefinedDOM: (selector) => {
-    // return ($(
-    //   '.main__search--result'
-    // ).innerHTML = `<p class="error">관련 영화가 없습니다.</p>`);
     return (selector.innerHTML = `<p class="error">관련 영화가 없습니다.</p>`);
   },
 };
-
-// handleErrNLoading.loadingDOM($('.main__search--result'));
-// handleErrNLoading.errorDOM($('.main__search--result'));
-// handleErrNLoading.undefinedDOM($('.main__search--result'));

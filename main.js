@@ -90,7 +90,7 @@ $('.section__container-movie-card-container').addEventListener(
 
 // 상세 영화정보 모달창 열기 함수
 const openMovieDetail = async (movieId) => {
-  // handleErrNLoading.loadingDOM();
+  handleErrNLoading.loadingDOM($('.modal-body'));
   try {
     const movieDetailData = await getMovieDetail(movieId);
     console.log(movieDetailData);
@@ -100,6 +100,7 @@ const openMovieDetail = async (movieId) => {
 
     $('.modal').classList.add('active');
   } catch (err) {
+    handleErrNLoading.errorDOM($('.modal-body'));
     console.log(err);
   }
 };
@@ -187,9 +188,9 @@ const findMovies = async () => {
     try {
       movies
         ? displayMovies(movies, totalResults)
-        : handleErrNLoading.undefinedDOM();
+        : handleErrNLoading.undefinedDOM($('.main__search--result'));
     } catch (err) {
-      handleErrNLoading.errorDOM();
+      handleErrNLoading.errorDOM($('.main__search--result'));
       console.log(err);
     }
   }
@@ -243,7 +244,7 @@ const displayMovies = async (movies) => {
 
 // 검색어, 검색영화 총 개수 업데이트 함수
 const updateTotalResults = async () => {
-  handleErrNLoading.loadingDOM();
+  handleErrNLoading.loadingDOM($('.main__search--result'));
   try {
     const { totalResults } = await getMovies(title, year);
     // const { totalResults } = await getMovies();
@@ -251,7 +252,7 @@ const updateTotalResults = async () => {
     // console.log($movies.children.length);
     return ($searchTotalResult.innerHTML = `${movieTitle}이(가) ${totalResults} 개 중 ${$movies.children.length}개 검색되었습니다.`);
   } catch (err) {
-    handleErrNLoading.errorDOM();
+    handleErrNLoading.errorDOM($('.main__search--result'));
     console.log(err);
   }
 };
@@ -305,8 +306,8 @@ const getMoreMovies = async () => {
 };
 
 const handleErrNLoading = {
-  loadingDOM: () => {
-    return ($('.main__search--result').innerHTML = ` <svg
+  loadingDOM: (selector) => {
+    return (selector.innerHTML = ` <svg
     class="spinner active"
     width="30px"
     height="30px"
@@ -323,19 +324,24 @@ const handleErrNLoading = {
       r="30"
     ></circle>
   </svg>`);
+    // $('.main__search--result')
   },
 
-  errorDOM: () => {
-    return ($(
-      '.main__search--result'
-    ).innerHTML = `<p class="error">에러가 발생했습니다.</p>`);
+  errorDOM: (selector) => {
+    // return ($(
+    //   '.main__search--result'
+    // ).innerHTML = `<p class="error">에러가 발생했습니다.</p>`);
+    return (selector.innerHTML = `<p class="error">에러가 발생했습니다.</p>`);
   },
 
-  undefinedDOM: () => {
-    return ($(
-      '.main__search--result'
-    ).innerHTML = `<p class="error">관련 영화가 없습니다.</p>`);
+  undefinedDOM: (selector) => {
+    // return ($(
+    //   '.main__search--result'
+    // ).innerHTML = `<p class="error">관련 영화가 없습니다.</p>`);
+    return (selector.innerHTML = `<p class="error">관련 영화가 없습니다.</p>`);
   },
 };
 
-// modal
+// handleErrNLoading.loadingDOM($('.main__search--result'));
+// handleErrNLoading.errorDOM($('.main__search--result'));
+// handleErrNLoading.undefinedDOM($('.main__search--result'));

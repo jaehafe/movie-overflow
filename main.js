@@ -184,7 +184,6 @@ const findMovies = async () => {
   for (let i = 1; i <= page; i++) {
     const { movies, totalResults } = await getMovies(title, year, i);
     console.log(movies);
-
     try {
       movies
         ? displayMovies(movies, totalResults)

@@ -31,6 +31,7 @@ const findMovies = async () => {
     alert('3글자 이상 입력해주세요.');
   }
 
+  // 검색 option(page, year) 값 가져오기
   page = Number(
     $selectedPage.options[$selectedPage.selectedIndex].dataset.selectValue
   );
@@ -38,6 +39,7 @@ const findMovies = async () => {
   // console.log('page', page);
   // console.log('year', year);
 
+  // 검색 option에 따른 영화 가져오기
   for (let i = 1; i <= page; i++) {
     const { movies, totalResults } = await getMovies(title, year, i);
     console.log(movies);
@@ -49,7 +51,7 @@ const findMovies = async () => {
   }
 };
 
-const displayMovies = async (movies, totalResults) => {
+const displayMovies = async (movies) => {
   const movieList = await movies
     .map((movie) => {
       const { Poster, Title, Year, imdbID } = movie;
@@ -91,7 +93,7 @@ const displayMovies = async (movies, totalResults) => {
     .join('');
 
   $movies.innerHTML += movieList;
-  // $searchTotalResult.innerHTML = `${search}이(가) 총 ${totalResults} 개 검색되었습니다.`;
+
   updateTotalResults();
 };
 
@@ -123,3 +125,24 @@ for (let i = 2023; i >= 1980; i--) {
   yearOpt.textContent = i;
   $selectedYear.append(yearOpt);
 }
+
+// 무한 스크롤
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      getMoreMovies();
+    }
+  });
+});
+io.observe($('#infinite-scroll__target'));
+
+const getMoreMovies = async () => {
+  page += 1;
+  const { movies } = await getMovies(title, year, page);
+
+  try {
+    displayMovies(movies);
+  } catch (err) {
+    console.log(err);
+  }
+};

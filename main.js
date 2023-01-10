@@ -1,5 +1,47 @@
 import './scss/style.scss';
 
+const openModalButtons = document.querySelectorAll('[data-modal-target]');
+const closeModalButtons = document.querySelectorAll('[data-close-button]');
+const overlay = document.getElementById('overlay');
+
+openModalButtons.forEach((button) => {
+  console.log(button);
+  button.addEventListener('click', () => {
+    // data-modal-target="#modal"
+    const modal = document.querySelector(button.dataset.modalTarget);
+    console.log(modal);
+
+    openModal(modal);
+  });
+});
+
+overlay.addEventListener('click', () => {
+  const modals = document.querySelectorAll('.modal.active');
+  modals.forEach((modal) => {
+    closeModal(modal);
+  });
+});
+
+closeModalButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const modal = button.closest('.modal');
+    closeModal(modal);
+  });
+});
+
+const openModal = (modal) => {
+  if (modal === null) return;
+  modal.classList.add('active');
+  overlay.classList.add('active');
+};
+
+const closeModal = (modal) => {
+  if (modal === null) return;
+  modal.classList.remove('active');
+  overlay.classList.remove('active');
+};
+//
+
 const $ = (selector) => document.querySelector(selector);
 
 const $searchBtn = $('#searchBtn');
@@ -8,6 +50,7 @@ const $movies = $('.section__container-movie-card-container');
 const $selectedYear = $('.main__search--options-select-year');
 const $selectedPage = $('.main__search--options-page');
 let $searchTotalResult = $('.main__search--result');
+const $movieDetail = $('.movie-detail');
 const $scrollTop = $('.scroll-top');
 
 let title;
@@ -23,31 +66,97 @@ async function getMovies(title, year, page) {
   return { movies, totalResults };
 }
 
-const handleErrNLoading = {
-  loadingDOM: () => {
-    return ($('.main__search--result').innerHTML = ` <svg
-    class="spinner active"
-    width="65px"
-    height="65px"
-    viewBox="0 0 66 66"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <circle
-      class="path"
-      fill="none"
-      stroke-width="6"
-      stroke-linecap="round"
-      cx="33"
-      cy="33"
-      r="30"
-    ></circle>
-  </svg>`);
-  },
+// 영화 상세페이지 가져오기
+const getMovieDetail = async (movieId) => {
+  const res = await fetch(
+    `https://omdbapi.com/?apikey=7035c60c&i=${movieId}&plot=full`
+  );
+  const movieDetailData = await res.json();
+  return movieDetailData;
+};
 
-  errorDOM: () => {
-    return ($('.main__search--result').innerHTML =
-      '<p class="error">there was an error</p>');
-  },
+$('.section__container-movie-card-container').addEventListener(
+  'click',
+  async (e) => {
+    let movieId = e.target.parentElement.parentElement.dataset.movieId;
+    console.log(movieId);
+    await openMovieDetail(movieId);
+  }
+);
+
+// 상세 영화정보 모달창 열기 함수
+const openMovieDetail = async (movieId) => {
+  // handleErrNLoading.loadingDOM();
+  try {
+    const movieDetailData = await getMovieDetail(movieId);
+    console.log(movieDetailData);
+    $('.modal-body').innerHTML = '';
+
+    displayDetailMovie(movieDetailData);
+
+    $('.modal').classList.add('active');
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// 상세 영화정보 dom
+const displayDetailMovie = async (movieDetailData) => {
+  let { Poster, Title, Ratings, Actors, Genre, Runtime, Plot } =
+    movieDetailData;
+
+  Poster =
+    Poster !== 'N/A' ? Poster.replace('SX300', 'SX700') : 'image_not_found.png';
+
+  // <img src='/imgs/${rate.Source}.png' alt='${rate.Source}' />
+
+  Ratings = Ratings !== 'N/A' ? 'N/A' : Ratings[0].Value;
+
+  const displayMovieDetail = `
+    <div class="modal-body">
+      <img src="${Poster}" alt="${Title}" />
+      <div class="detail">
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">평점</h3>
+          </div>
+          <div class="detail-infos__value">
+            <div class="detail-infos__value--rating">${Ratings}</div>
+          </div>
+        </div>
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">장르</h3>
+          </div>
+          <div class="detail-infos__value">${Genre}</div>
+        </div>
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">재생 시간</h3>
+          </div>
+          <div class="detail-infos__value">${Runtime}</div>
+        </div>
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">출연진</h3>
+          </div>
+          <div class="detail-infos__value plot">
+            ${Actors}
+          </div>
+        </div>
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">줄거리</h3>
+          </div>
+          <div class="detail-infos__value plot">
+            ${Plot}
+          </div>
+        </div>
+        </div>
+      </div>
+        `;
+
+  $('.modal-body').innerHTML = displayMovieDetail;
 };
 
 const findMovies = async () => {
@@ -71,11 +180,12 @@ const findMovies = async () => {
     const { movies, totalResults } = await getMovies(title, year, i);
     console.log(movies);
 
-    // handleErrNLoading.loadingDOM();
     try {
-      displayMovies(movies, totalResults);
+      movies
+        ? displayMovies(movies, totalResults)
+        : handleErrNLoading.undefinedDOM();
     } catch (err) {
-      // handleErrNLoading.errorDOM();
+      handleErrNLoading.errorDOM();
       console.log(err);
     }
   }
@@ -87,14 +197,14 @@ const displayMovies = async (movies) => {
       const { Poster, Title, Year, imdbID } = movie;
       return `
                 <div class="section__container-movie-card" data-movie-id="${imdbID}">
-                  <a>
+                  <button type="button" class="movie-detail" data-modal-target="#modal">
                     <img
-                      data-modal-target="#modal"
+            
                       src="${Poster === 'N/A' ? 'image_not_found.png' : Poster}"
-                      alt=""
+                      alt="${Title}"
                       class="section__container-movie-card--img"
                     />
-                  </a>
+                  </button>
                   <div class="flex">
                     <div class="section__container-movie-card--thumb">
                       <p class="section__container-movie-card--year">${Year}</p>
@@ -133,9 +243,9 @@ const updateTotalResults = async () => {
   try {
     const { totalResults } = await getMovies(title, year);
     // const { totalResults } = await getMovies();
-    let val = $searchInput.value;
+    let movieTitle = $searchInput.value;
     // console.log($movies.children.length);
-    return ($searchTotalResult.innerHTML = `${val}이(가) ${totalResults} 개 중 ${$movies.children.length}개 검색되었습니다.`);
+    return ($searchTotalResult.innerHTML = `${movieTitle}이(가) ${totalResults} 개 중 ${$movies.children.length}개 검색되었습니다.`);
   } catch (err) {
     handleErrNLoading.errorDOM();
     console.log(err);
@@ -178,13 +288,50 @@ if ($movies === undefined) {
   console.log(io.unobserve($('#infinite-scroll__target')));
 }
 
+// 더 많은 영화 가져오기
 const getMoreMovies = async () => {
   page += 1;
   const { movies } = await getMovies(title, year, page);
 
   try {
-    displayMovies(movies);
+    movies && displayMovies(movies);
   } catch (err) {
     console.log(err);
   }
 };
+
+const handleErrNLoading = {
+  loadingDOM: () => {
+    return ($('.main__search--result').innerHTML = ` <svg
+    class="spinner active"
+    width="30px"
+    height="30px"
+    viewBox="0 0 66 66"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      class="path"
+      fill="none"
+      stroke-width="6"
+      stroke-linecap="round"
+      cx="33"
+      cy="33"
+      r="30"
+    ></circle>
+  </svg>`);
+  },
+
+  errorDOM: () => {
+    return ($(
+      '.main__search--result'
+    ).innerHTML = `<p class="error">에러가 발생했습니다.</p>`);
+  },
+
+  undefinedDOM: () => {
+    return ($(
+      '.main__search--result'
+    ).innerHTML = `<p class="error">관련 영화가 없습니다.</p>`);
+  },
+};
+
+// modal

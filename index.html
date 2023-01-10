@@ -29,10 +29,10 @@
               <h1>movie <span>Overflow</span></h1>
             </div>
             <div class="header__nav-list">
-              <a href="#"><span>홈</span></a>
+              <!-- <a href="#"><span>홈</span></a>
               <a href="#"><span>New</span></a>
               <a href="#"><span>인기</span></a>
-              <a href="#"><span>시청목록</span></a>
+              <a href="#"><span>시청목록</span></a> -->
             </div>
           </div>
 
@@ -142,19 +142,21 @@
             aria-label="hidden"
           />
           <!-- Card -->
-          <!-- <div class="section__container-movie-card" data-movie-id="movie-id">
-            <a href="#">
+          <!-- <div class="section__container-movie-card" data-movie-id="${imdbID}">
+            <button class="movie-detail" data-modal-target="#modal">
               <img
-                data-modal-target="#modal"
-                src="/thum.jpeg"
-                alt=""
+                src="thum.jpeg"
+                alt="thumbnail"
                 class="section__container-movie-card--img"
               />
-            </a>
+            </button>
             <div class="flex">
               <div class="section__container-movie-card--thumb">
-                <p class="section__container-movie-card--year">2015</p>
-                <h2 class="section__container-movie-card--title">dropbox</h2>
+                <p class="section__container-movie-card--year">${Year}</p>
+                <h2 class="section__container-movie-card--title">
+                  ${ Title.length > 10 ? Title.substring(0, 10).concat(' ...') :
+                  Title }
+                </h2>
               </div>
               <div class="section__container-movie-card--btn">
                 <button
@@ -173,21 +175,21 @@
         </div>
       </div>
     </section>
-    <div id="infinite-scroll__target" aria-label="hidden">
-      <div aria-label="hidden"></div>
+    <div id="infinite-scroll__target" aria-label="loading">
+      <div aria-label="loading"></div>
     </div>
 
     <!-- modal overlay -->
     <div class="modal" id="modal">
       <div class="modal-header">
-        <div class="modal-header-title">movie detail</div>
+        <div class="modal-header-title">영화 상세정보</div>
         <button data-close-button class="modal-header-close-button">
           &times;
         </button>
       </div>
       <!-- modal body -->
       <div class="modal-body">
-        <img src="/thum.jpeg" alt="modal poster" />
+        <!-- <img src="/thum.jpeg" alt="modal poster" />
         <div class="detail">
           <div class="detail-infos">
             <div class="detail-infos__subheading">
@@ -207,7 +209,7 @@
             <div class="detail-infos__subheading">
               <h3 class="detail-infos__subheading--label">재생 시간</h3>
             </div>
-            <div class="detail-infos__value">50min</div>
+            <div class="detail-infos__value">50 min</div>
           </div>
           <div class="detail-infos">
             <div class="detail-infos__subheading">
@@ -222,31 +224,12 @@
             <div class="detail-infos__subheading">
               <h3 class="detail-infos__subheading--label">줄거리</h3>
             </div>
-            <div class="detail-infos__value plot">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-              soluta vel rem velit a. Saepe quas eius tempora dolore, tempore
-              numquam aliquam dicta veniam quasi, natus libero amet? Excepturi
-              suscipit consequuntur consectetur iure alias aspernatur voluptas
-              ex, nam inventore, voluptates, magni quisquam tempore ducimus
-              iusto sequi odio impedit debitis. Natus. Lorem ipsum dolor sit
-              amet consectetur adipisicing elit. Dolor asperiores natus
-              repellendus, ut earum minima tempore vel omnis ducimus id
-              necessitatibus laboriosam provident cupiditate magnam, hic nobis.
-              Numquam non repellat corrupti. Dolor sequi officia velit doloribus
-              placeat molestias amet, temporibus explicabo, enim consequatur et
-              perspiciatis, perferendis eius repellat beatae veniam. Ad
-              corrupti, velit quibusdam corporis quae assumenda distinctio
-              numquam, deleniti eaque iusto cumque? Iste facilis reprehenderit
-              maiores numquam placeat quo esse sequi harum, voluptatibus dolore
-              iure voluptates dolorem non beatae nemo aliquam ab ipsum, hic,
-              consequuntur repellendus. Blanditiis exercitationem voluptas,
-              repellat tempore quae aperiam? Eligendi aspernatur laudantium
-              officiis distinctio ipsa.
-            </div>
+            <div class="detail-infos__value plot">plot</div>
           </div>
-          <!-- modal body end -->
-        </div>
+          modal body end
+        </div> -->
       </div>
+      <!-- modal end -->
     </div>
     <div id="overlay"></div>
   </body>

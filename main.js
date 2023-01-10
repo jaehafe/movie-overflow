@@ -105,6 +105,8 @@ const updateTotalResults = async () => {
   return ($searchTotalResult.innerHTML = `${val}이(가) 총 ${totalResults} 개 검색되었습니다.`);
 };
 
+const displayedMovies = async () => {};
+
 // 검색 click, Enter시 findMovies
 $searchBtn.addEventListener('click', async (e) => {
   e.preventDefault();
@@ -129,12 +131,16 @@ for (let i = 2023; i >= 1980; i--) {
 // 무한 스크롤
 const io = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
-    if (entry.isIntersecting) {
+    // 검색했을 때만 observe 관찰
+    if (entry.isIntersecting && $movies.children.length > 1) {
       getMoreMovies();
     }
   });
 });
 io.observe($('#infinite-scroll__target'));
+// if ($movies === '') {
+//   io.unobserve($('#infinite-scroll__target'));
+// }
 
 const getMoreMovies = async () => {
   page += 1;

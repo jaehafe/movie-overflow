@@ -68,7 +68,6 @@
                 <span class="material-symbols-outlined main__search--icon">
                   search
                 </span>
-                <option value=""></option>
                 <input
                   class="main__search--input"
                   id="searchInput"
@@ -76,9 +75,11 @@
                 />
                 <div class="main__search--options">
                   <select class="main__search--options-page">
-                    <option value="1" selected="selected">10</option>
-                    <option value="2">20</option>
-                    <option value="3">30</option>
+                    <option data-select-value="1" selected="selected">
+                      10
+                    </option>
+                    <option data-select-value="2">20</option>
+                    <option data-select-value="3">30</option>
                   </select>
                   <select class="main__search--options-select-year">
                     <option value="" selected="selected">All Years</option>
@@ -105,6 +106,12 @@
         </div>
       </div>
     </main>
+
+    <div class="scroll-top">
+      <button class="scroll-top__btn">
+        <span class="material-symbols-outlined">arrow_upward </span>
+      </button>
+    </div>
 
     <!-- result -->
     <section class="section">

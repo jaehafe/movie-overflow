@@ -348,9 +348,10 @@ $duration: 1.4s;
       box-shadow: var(--box-shadow);
       border-radius: 7px;
       overflow: hidden;
+      transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
 
       &:hover {
-        transform: scale(1.2);
+        transform: translateY(-10px);
       }
 
       &--img {

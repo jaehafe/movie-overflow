@@ -23,6 +23,33 @@ async function getMovies(title, year, page) {
   return { movies, totalResults };
 }
 
+const handleErrNLoading = {
+  loadingDOM: () => {
+    return ($('.main__search--result').innerHTML = ` <svg
+    class="spinner active"
+    width="65px"
+    height="65px"
+    viewBox="0 0 66 66"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      class="path"
+      fill="none"
+      stroke-width="6"
+      stroke-linecap="round"
+      cx="33"
+      cy="33"
+      r="30"
+    ></circle>
+  </svg>`);
+  },
+
+  errorDOM: () => {
+    return ($('.main__search--result').innerHTML =
+      '<p class="error">there was an error</p>');
+  },
+};
+
 const findMovies = async () => {
   // reset movie list
   $movies.innerHTML = '';
@@ -43,9 +70,12 @@ const findMovies = async () => {
   for (let i = 1; i <= page; i++) {
     const { movies, totalResults } = await getMovies(title, year, i);
     console.log(movies);
+
+    // handleErrNLoading.loadingDOM();
     try {
       displayMovies(movies, totalResults);
     } catch (err) {
+      // handleErrNLoading.errorDOM();
       console.log(err);
     }
   }
@@ -99,14 +129,18 @@ const displayMovies = async (movies) => {
 
 // 검색어, 검색영화 총 개수 업데이트 함수
 const updateTotalResults = async () => {
-  const { totalResults } = await getMovies(title, year);
-  // const { totalResults } = await getMovies();
-  let val = $searchInput.value;
-  // console.log($movies.children.length);
-  return ($searchTotalResult.innerHTML = `${val}이(가) ${totalResults} 개 중 ${$movies.children.length} 검색되었습니다.`);
+  handleErrNLoading.loadingDOM();
+  try {
+    const { totalResults } = await getMovies(title, year);
+    // const { totalResults } = await getMovies();
+    let val = $searchInput.value;
+    // console.log($movies.children.length);
+    return ($searchTotalResult.innerHTML = `${val}이(가) ${totalResults} 개 중 ${$movies.children.length}개 검색되었습니다.`);
+  } catch (err) {
+    handleErrNLoading.errorDOM();
+    console.log(err);
+  }
 };
-
-const displayedMovies = async () => {};
 
 // 검색 click, Enter시 findMovies
 $searchBtn.addEventListener('click', async (e) => {
@@ -139,9 +173,10 @@ const io = new IntersectionObserver((entries) => {
   });
 });
 io.observe($('#infinite-scroll__target'));
-// if ($movies === '') {
-//   io.unobserve($('#infinite-scroll__target'));
-// }
+if ($movies === undefined) {
+  io.unobserve($('#infinite-scroll__target'));
+  console.log(io.unobserve($('#infinite-scroll__target')));
+}
 
 const getMoreMovies = async () => {
   page += 1;

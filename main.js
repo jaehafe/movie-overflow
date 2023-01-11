@@ -169,7 +169,7 @@ const findMovies = async () => {
   $movies.innerHTML = '';
   title = $searchInput.value;
   if (title === '' || title.length < 3) {
-    return alert('3글자 이상 입력해주세요.');
+    return handleErrNLoading.searchCondition($('.main__search--result'));
   }
 
   // 검색 option(page, year) 값 가져오기
@@ -316,6 +316,10 @@ const handleErrNLoading = {
 
   undefinedDOM: (selector) => {
     return (selector.innerHTML = `<p class="error">관련 영화가 없습니다.</p>`);
+  },
+
+  searchCondition: (selector) => {
+    return (selector.innerHTML = `<p class="error">3글자 이상 입력해주세요.</p>`);
   },
 };
 

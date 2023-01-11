@@ -11,10 +11,6 @@ option {
   font-family: inherit;
 }
 
-.header__nav-logo--svg {
-  width: 40px;
-  height: 40px;
-}
 header {
   position: sticky;
   top: 0;
@@ -44,6 +40,11 @@ header {
       display: flex;
       align-items: center;
       margin-right: 20px;
+
+      &--svg {
+        width: 40px;
+        height: 40px;
+      }
 
       h1 {
         margin: 0;
@@ -223,27 +224,19 @@ header {
 
 // scroll top 버튼
 .scroll-top {
+  display: none;
   position: fixed;
-  // display: none;
-  padding: 10px;
+  padding: 8px 10px;
   text-align: center;
   bottom: 20px;
   right: 20px;
+  border: 1px solid var(--main-color);
   border-radius: 50%;
-  background-color: var(--main-color);
+  background-color: #fff;
+  cursor: pointer;
 
-  &:hover {
-    background-color: #fff;
-  }
   &__btn {
-    & > span {
-      font-weight: 600;
-      color: #fff;
-
-      &:hover {
-        color: var(--main-color);
-      }
-    }
+    color: var(--main-color);
   }
 }
 

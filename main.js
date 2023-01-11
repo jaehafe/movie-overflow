@@ -41,8 +41,8 @@ const closeModal = (modal) => {
   modal.classList.remove('active');
   overlay.classList.remove('active');
 };
-//
 
+// 변수 선언
 const $ = (selector) => document.querySelector(selector);
 
 const $searchBtn = $('#searchBtn');
@@ -52,7 +52,7 @@ const $selectedYear = $('.main__search--options-select-year');
 const $selectedPage = $('.main__search--options-page');
 let $searchTotalResult = $('.main__search--result');
 const $movieDetail = $('.movie-detail');
-const $scrollTop = $('.scroll-top');
+const $scrollTopBtn = $('.scroll-top');
 
 let title;
 let year;
@@ -318,3 +318,18 @@ const handleErrNLoading = {
     return (selector.innerHTML = `<p class="error">관련 영화가 없습니다.</p>`);
   },
 };
+
+const handleScrollTopBtn = () => {
+  window.scrollY > 150
+    ? ($scrollTopBtn.style.display = 'block')
+    : ($scrollTopBtn.style.display = 'none');
+};
+
+const moveToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};
+$scrollTopBtn.addEventListener('click', moveToTop);
+document.addEventListener('scroll', handleScrollTopBtn);

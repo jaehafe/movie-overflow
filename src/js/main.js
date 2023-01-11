@@ -48,7 +48,7 @@ const closeModal = (modal) => {
 
 const $searchBtn = $('#searchBtn');
 const $searchInput = $('#searchInput');
-const $movies = $('.section__container-movie-card-container');
+const $moviesContainer = $('.section__container-movie-card-container');
 const $selectedYear = $('.main__search--options-select-year');
 const $selectedPage = $('.main__search--options-page');
 let $searchTotalResult = $('.main__search--result');
@@ -167,7 +167,7 @@ const displayDetailMovie = async (movieDetailData) => {
 
 const findMovies = async () => {
   // reset movie list
-  $movies.innerHTML = '';
+  $moviesContainer.innerHTML = '';
   title = $searchInput.value;
   if (title === '' || title.length < 3) {
     return handleErrNLoading.searchCondition($('.main__search--result'));
@@ -237,7 +237,7 @@ const displayMovies = async (movies) => {
     })
     .join('');
 
-  $movies.innerHTML += movieList;
+  $moviesContainer.innerHTML += movieList;
 
   updateTotalResults();
 };
@@ -249,7 +249,7 @@ const updateTotalResults = async () => {
     const { totalResults } = await getMovies(title, year);
 
     let movieTitle = $searchInput.value;
-    $searchTotalResult.innerHTML = `${movieTitle}이(가) ${totalResults} 개 중 ${$movies.children.length}개 검색되었습니다.`;
+    $searchTotalResult.innerHTML = `${movieTitle}이(가) ${totalResults} 개 중 ${$moviesContainer.children.length}개 검색되었습니다.`;
   } catch (err) {
     handleErrNLoading.errorDOM($('.main__search--result'));
     console.log(err);
@@ -278,19 +278,27 @@ for (let i = 2023; i >= 1980; i--) {
 }
 
 // 무한 스크롤
+const options = {
+  rootMargin: '100px 0px 100px 0px', // rootMargin을 '10px 10px 10px 10px'로 설정
+  threshold: 0, // 타겟 엘리먼트가 교차영역에 진입했을 때, 교차영역에 타켓 엘리먼트의 50%가 있을 때, 교차 영역에 타켓 엘리먼트의 100%가 있을 때 observe가 반응한다.
+};
+
 const io = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     // 검색했을 때만 observe 관찰
-    if (entry.isIntersecting && $movies.children.length > 1) {
+    if (entry.isIntersecting && $moviesContainer.children.length > 1) {
       getMoreMovies();
     }
   });
-});
+}, options);
 io.observe($('#infinite-scroll__target'));
-if ($movies === undefined) {
-  io.unobserve($('#infinite-scroll__target'));
-  console.log(io.unobserve($('#infinite-scroll__target')));
-}
+// io.observe($('.section__container-movie-card.length -1'));
+console.log(io);
+
+// if ($moviesContainer === undefined) {
+//   io.unobserve($('#infinite-scroll__target'));
+//   console.log(io.unobserve($('#infinite-scroll__target')));
+// }
 
 // 더 많은 영화 가져오기
 const getMoreMovies = async () => {

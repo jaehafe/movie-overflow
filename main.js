@@ -249,7 +249,6 @@ const updateTotalResults = async () => {
 
     let movieTitle = $searchInput.value;
     $searchTotalResult.innerHTML = `${movieTitle}이(가) ${totalResults} 개 중 ${$movies.children.length}개 검색되었습니다.`;
-    $searchInput.value = '';
   } catch (err) {
     handleErrNLoading.errorDOM($('.main__search--result'));
     console.log(err);

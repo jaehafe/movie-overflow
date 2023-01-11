@@ -1,10 +1,10 @@
 import '../scss/style.scss';
-// import '../scss/style.scss';
+import { $, $$ } from './dom.js';
 
 // handle 영화 상세정보 모달창
-const openModalButtons = document.querySelectorAll('[data-modal-target]');
-const closeModalButtons = document.querySelectorAll('[data-close-button]');
-const overlay = document.getElementById('overlay');
+const openModalButtons = $$('[data-modal-target]');
+const closeModalButtons = $$('[data-close-button]');
+const overlay = $('#overlay');
 
 openModalButtons.forEach((button) => {
   console.log(button);
@@ -44,7 +44,6 @@ const closeModal = (modal) => {
 };
 
 // 변수 선언
-const $ = (selector) => document.querySelector(selector);
 
 const $searchBtn = $('#searchBtn');
 const $searchInput = $('#searchInput');
@@ -59,7 +58,7 @@ let title;
 let year;
 let page = 1;
 
-async function getMovies(title, year, page) {
+const getMovies = async (title, year, page) => {
   const s = `&s=${title}`;
   const y = `&y=${year}`;
   const p = `&page=${page}`;
@@ -68,7 +67,7 @@ async function getMovies(title, year, page) {
   );
   const { Search: movies, totalResults } = await res.json();
   return { movies, totalResults };
-}
+};
 
 // 영화 상세페이지 가져오기
 const getMovieDetail = async (movieId) => {

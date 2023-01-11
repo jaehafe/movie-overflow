@@ -1,4 +1,5 @@
-import './scss/style.scss';
+import '../scss/style.scss';
+// import '../scss/style.scss';
 
 // handle 영화 상세정보 모달창
 const openModalButtons = document.querySelectorAll('[data-modal-target]');

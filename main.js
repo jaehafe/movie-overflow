@@ -1,5 +1,6 @@
 import './scss/style.scss';
 
+// handle 영화 상세정보 모달창
 const openModalButtons = document.querySelectorAll('[data-modal-target]');
 const closeModalButtons = document.querySelectorAll('[data-close-button]');
 const overlay = document.getElementById('overlay');
@@ -83,6 +84,7 @@ $('.section__container-movie-card-container').addEventListener(
   'click',
   async (e) => {
     let movieId = e.target.parentElement.parentElement.dataset.movieId;
+    if (!movieId) return;
     console.log(movieId);
     await openMovieDetail(movieId);
   }
@@ -112,8 +114,6 @@ const displayDetailMovie = async (movieDetailData) => {
 
   Poster =
     Poster !== 'N/A' ? Poster.replace('SX300', 'SX700') : 'image_not_found.png';
-
-  // <img src='/imgs/${rate.Source}.png' alt='${rate.Source}' />
 
   Ratings = Ratings !== 'N/A' ? 'N/A' : Ratings[0].Value;
 
@@ -169,7 +169,7 @@ const findMovies = async () => {
   $movies.innerHTML = '';
   title = $searchInput.value;
   if (title === '' || title.length < 3) {
-    alert('3글자 이상 입력해주세요.');
+    return alert('3글자 이상 입력해주세요.');
   }
 
   // 검색 option(page, year) 값 가져오기
@@ -246,9 +246,8 @@ const updateTotalResults = async () => {
   handleErrNLoading.loadingDOM($('.main__search--result'));
   try {
     const { totalResults } = await getMovies(title, year);
-    // const { totalResults } = await getMovies();
+
     let movieTitle = $searchInput.value;
-    // console.log($movies.children.length);
     $searchTotalResult.innerHTML = `${movieTitle}이(가) ${totalResults} 개 중 ${$movies.children.length}개 검색되었습니다.`;
     $searchInput.value = '';
   } catch (err) {
@@ -270,7 +269,7 @@ $searchBtn.addEventListener('keypress', (e) => {
   findMovies();
 });
 
-// 영화 년도 생성
+// 영화 년도 select 생성
 for (let i = 2023; i >= 1980; i--) {
   const yearOpt = document.createElement('option');
   yearOpt.value = i;
@@ -305,6 +304,7 @@ const getMoreMovies = async () => {
   }
 };
 
+// 에러, 로딩 ui handle 함수
 const handleErrNLoading = {
   loadingDOM: (selector) => {
     return (selector.innerHTML = `<svg class="spinner active" width="30px" height="30px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg>`);

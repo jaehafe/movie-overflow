@@ -174,10 +174,9 @@ const findMovies = async () => {
   }
 
   // 검색 option(page, year) 값 가져오기
-  page = Number(
-    $selectedPage.options[$selectedPage.selectedIndex].dataset.selectValue
-  );
-  year = $selectedYear.options[$selectedYear.selectedIndex].value;
+  let page =
+    $selectedPage.options[$selectedPage.selectedIndex].dataset.selectValue;
+  let year = $selectedYear.options[$selectedYear.selectedIndex].value;
   // console.log('page', page);
   // console.log('year', year);
 
@@ -263,18 +262,16 @@ $searchBtn.addEventListener('click', async (e) => {
 });
 
 $searchBtn.addEventListener('keypress', (e) => {
-  if (e.key !== 'Enter') {
-    return;
-  }
+  if (e.key !== 'Enter') return;
   findMovies();
 });
 
 // 영화연도 select 생성
 for (let i = 2023; i >= 1980; i--) {
-  const yearOpt = document.createElement('option');
-  yearOpt.value = i;
-  yearOpt.textContent = i;
-  $selectedYear.append(yearOpt);
+  const yearOption = document.createElement('option');
+  yearOption.value = i;
+  yearOption.textContent = i;
+  $selectedYear.append(yearOption);
 }
 
 // 무한 스크롤

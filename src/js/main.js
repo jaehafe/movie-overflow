@@ -70,101 +70,6 @@ const getMovies = async (title, year, page) => {
   return { movies, totalResults };
 };
 
-// 영화 상세페이지 가져오기
-const getMovieDetail = async (movieId) => {
-  const res = await fetch(
-    `https://omdbapi.com/?apikey=${
-      import.meta.env.VITE_API_KEY
-    }&i=${movieId}&plot=full`
-  );
-  const movieDetailData = await res.json();
-  return movieDetailData;
-};
-
-$('.section__container-movie-card-container').addEventListener(
-  'click',
-  async (e) => {
-    let movieId = e.target.parentElement.parentElement.dataset.movieId;
-    if (!movieId) return;
-    console.log(movieId);
-    await openMovieDetail(movieId);
-  }
-);
-
-// 상세 영화정보 모달창 열기 함수
-const openMovieDetail = async (movieId) => {
-  handleErrNLoading.loadingDOM($('.modal-body'));
-  try {
-    const movieDetailData = await getMovieDetail(movieId);
-    console.log(movieDetailData);
-    $('.modal-body').innerHTML = '';
-
-    displayDetailMovie(movieDetailData);
-
-    $('.modal').classList.add('active');
-  } catch (err) {
-    handleErrNLoading.errorDOM($('.modal-body'));
-    console.log(err);
-  }
-};
-
-// 상세 영화정보 dom
-const displayDetailMovie = async (movieDetailData) => {
-  let { Poster, Title, Ratings, Actors, Genre, Runtime, Plot } =
-    movieDetailData;
-
-  Poster =
-    Poster !== 'N/A' ? Poster.replace('SX300', 'SX700') : 'image_not_found.png';
-
-  Ratings = Ratings !== 'N/A' ? 'N/A' : Ratings[0].Value;
-
-  const displayMovieDetail = `
-    <div class="modal-body">
-      <img src="${Poster}" alt="${Title}" />
-      <div class="detail">
-        <div class="detail-infos">
-          <div class="detail-infos__subheading">
-            <h3 class="detail-infos__subheading--label">평점</h3>
-          </div>
-          <div class="detail-infos__value">
-            <div class="detail-infos__value--rating">${Ratings}</div>
-          </div>
-        </div>
-        <div class="detail-infos">
-          <div class="detail-infos__subheading">
-            <h3 class="detail-infos__subheading--label">장르</h3>
-          </div>
-          <div class="detail-infos__value">${Genre}</div>
-        </div>
-        <div class="detail-infos">
-          <div class="detail-infos__subheading">
-            <h3 class="detail-infos__subheading--label">재생 시간</h3>
-          </div>
-          <div class="detail-infos__value">${Runtime}</div>
-        </div>
-        <div class="detail-infos">
-          <div class="detail-infos__subheading">
-            <h3 class="detail-infos__subheading--label">출연진</h3>
-          </div>
-          <div class="detail-infos__value plot">
-            ${Actors}
-          </div>
-        </div>
-        <div class="detail-infos">
-          <div class="detail-infos__subheading">
-            <h3 class="detail-infos__subheading--label">줄거리</h3>
-          </div>
-          <div class="detail-infos__value plot">
-            ${Plot}
-          </div>
-        </div>
-        </div>
-      </div>
-        `;
-
-  $('.modal-body').innerHTML = displayMovieDetail;
-};
-
 const findMovies = async () => {
   // reset movie list
   $moviesContainer.innerHTML = '';
@@ -276,8 +181,8 @@ for (let i = 2023; i >= 1980; i--) {
 
 // 무한 스크롤
 const options = {
-  rootMargin: '100px 0px 100px 0px', // rootMargin을 '10px 10px 10px 10px'로 설정
-  threshold: 0, // 타겟 엘리먼트가 교차영역에 진입했을 때, 교차영역에 타켓 엘리먼트의 50%가 있을 때, 교차 영역에 타켓 엘리먼트의 100%가 있을 때 observe가 반응한다.
+  rootMargin: '100px 0px 100px 0px',
+  threshold: 0,
 };
 
 const io = new IntersectionObserver((entries) => {
@@ -307,6 +212,101 @@ const getMoreMovies = async () => {
   } catch (err) {
     console.log(err);
   }
+};
+
+// 영화 상세페이지 가져오기
+const getMovieDetail = async (movieId) => {
+  const res = await fetch(
+    `https://omdbapi.com/?apikey=${
+      import.meta.env.VITE_API_KEY
+    }&i=${movieId}&plot=full`
+  );
+  const movieDetailData = await res.json();
+  return movieDetailData;
+};
+
+$('.section__container-movie-card-container').addEventListener(
+  'click',
+  async (e) => {
+    let movieId = e.target.parentElement.parentElement.dataset.movieId;
+    if (!movieId) return;
+    console.log(movieId);
+    await openMovieDetail(movieId);
+  }
+);
+
+// 상세 영화정보 모달창 열기 함수
+const openMovieDetail = async (movieId) => {
+  handleErrNLoading.loadingDOM($('.modal-body'));
+  try {
+    const movieDetailData = await getMovieDetail(movieId);
+    console.log(movieDetailData);
+    $('.modal-body').innerHTML = '';
+
+    displayDetailMovie(movieDetailData);
+
+    $('.modal').classList.add('active');
+  } catch (err) {
+    handleErrNLoading.errorDOM($('.modal-body'));
+    console.log(err);
+  }
+};
+
+// 상세 영화정보 dom
+const displayDetailMovie = async (movieDetailData) => {
+  let { Poster, Title, Ratings, Actors, Genre, Runtime, Plot } =
+    movieDetailData;
+
+  Poster =
+    Poster !== 'N/A' ? Poster.replace('SX300', 'SX700') : 'image_not_found.png';
+
+  Ratings = Ratings !== 'N/A' ? 'N/A' : Ratings[0].Value;
+
+  const displayMovieDetail = `
+    <div class="modal-body">
+      <img src="${Poster}" alt="${Title}" />
+      <div class="detail">
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">평점</h3>
+          </div>
+          <div class="detail-infos__value">
+            <div class="detail-infos__value--rating">${Ratings}</div>
+          </div>
+        </div>
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">장르</h3>
+          </div>
+          <div class="detail-infos__value">${Genre}</div>
+        </div>
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">재생 시간</h3>
+          </div>
+          <div class="detail-infos__value">${Runtime}</div>
+        </div>
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">출연진</h3>
+          </div>
+          <div class="detail-infos__value plot">
+            ${Actors}
+          </div>
+        </div>
+        <div class="detail-infos">
+          <div class="detail-infos__subheading">
+            <h3 class="detail-infos__subheading--label">줄거리</h3>
+          </div>
+          <div class="detail-infos__value plot">
+            ${Plot}
+          </div>
+        </div>
+        </div>
+      </div>
+        `;
+
+  $('.modal-body').innerHTML = displayMovieDetail;
 };
 
 // 최상단 이동 scroll 버튼 함수

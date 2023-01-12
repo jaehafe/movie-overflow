@@ -52,8 +52,8 @@ src/*
 
 ## Tasks & Issues
 
-- [ ] 영화 상세정보 출력 전 loading ui
-- [ ] 영화 위시리스트 추가, 삭제
+- [x] 영화 상세정보 출력 전 loading ui
+- [ ] 영화 watch list 추가, 삭제
 
 ## Running Locally
 

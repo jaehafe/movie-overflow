@@ -1,6 +1,6 @@
 # 영화 검색 사이트 만들기
 
-## DEMO [movie overflow](https://movie-overflow.vercel.app/)
+DEMO [movie overflow](https://movie-overflow.vercel.app/)
 
 - [omdb api](https://www.omdbapi.com/) 활용
 - 기간: 1.2 - 1.11
